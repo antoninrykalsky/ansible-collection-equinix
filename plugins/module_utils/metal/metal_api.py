@@ -217,6 +217,15 @@ METAL_CONNECTION_RESPONSE_ATTRIBUTE_MAP = {
 }
 
 
+METAL_GATEWAY_RESPONSE_ATTRIBUTE_MAP = {
+    'id': 'id',
+    'ip_reservation_id': 'ip_reservation.id',
+    'private_ipv4_subnet_size': 'private_ipv4_subnet_size',
+    'virtual_network_id': 'virtual_network_id',
+    # 'project_id': 'project.id',
+}
+
+
 def get_attribute_mapper(resource_type):
     """
     Returns attribute mapper for the given resource type.
@@ -231,6 +240,7 @@ def get_attribute_mapper(resource_type):
     connection_resources = set(['metal_connection', 'metal_connection_project', 'metal_connection_organization',
                                 'metal_connection_project_dedicated', 'metal_connection_organization_dedicated',
                                 'metal_connection_project_vlanfabric', 'metal_connection_project_vrf'])
+    gateway_resources = set(["metal_gateway", "metal_gateway_vrf"])
     if resource_type in device_resources:
         return METAL_DEVICE_RESPONSE_ATTRIBUTE_MAP
     elif resource_type in project_resources:
@@ -253,6 +263,8 @@ def get_attribute_mapper(resource_type):
         return METAL_ORGANIZATION_RESPONSE_ATTRIBUTE_MAP
     elif resource_type in vlan_resources:
         return VLAN_RESPONSE_ATTRIBUTE_MAP
+    elif resource_type in gateway_resources:
+        return METAL_GATEWAY_RESPONSE_ATTRIBUTE_MAP
     else:
         raise NotImplementedError("No mapper for resource type %s" % resource_type)
 
@@ -272,6 +284,8 @@ def call(resource_type, action, equinix_metal_client, params={}):
     # import q; q(response)
     if action == action.DELETE:
         return None
+    # import pydevd_pycharm
+    # pydevd_pycharm.settrace('localhost', port=5555, stdoutToServer=True, stderrToServer=True)
     attribute_mapper = get_attribute_mapper(resource_type)
     if action == action.LIST:
         if resource_type == 'metal_available_ip':
