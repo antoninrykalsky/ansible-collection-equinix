@@ -1,0 +1,13 @@
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  vars_files:
+    - ../../../integration_config.yml
+  tasks:
+
+    - debug:
+          msg: "Skipped testing the metal_device_inventory role. It is not designed to run in a GitHub action. See runme.sh"
+
+    - debug:
+          msg: ""
+          when: false

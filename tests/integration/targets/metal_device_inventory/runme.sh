@@ -2,6 +2,13 @@
 
 set -eux
 
+EXECUTE_THIS_TEST_FILE="/tmp/equinix-cloud-dyn-inventory"
+
+if [ ! -f "$EXECUTE_THIS_TEST_FILE" ]; then
+    ansible-playbook playbooks/skipping_info.yml "$@"
+    exit 1
+fi
+
 unique_id=$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 8 | head -n 1)
 
 cleanup() {
